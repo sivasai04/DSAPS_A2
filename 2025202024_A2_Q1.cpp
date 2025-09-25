@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -13,6 +14,28 @@ class deque{
         T* arr;
 
     public:
+
+        void doublesize(){
+            int newCapacity;
+            if(Qcapacity == 0){
+                newCapacity = 1;
+            }
+            else{
+                newCapacity = 2*Qcapacity;
+            }
+            T* ReSize = new T[newCapacity];
+
+            for(int i=0; i<Qsize; i++){
+                int ind = (FrontInd+i)%Qcapacity;
+                ReSize[i] = arr[ind];
+            }
+            delete[] arr;
+            arr = ReSize;
+            FrontInd = 0;
+            BackInd = Qsize-1;
+            Qcapacity = newCapacity;
+        }
+        
         ////////............ operation 1 initialing the deque.
         deque(){
             arr = nullptr;
@@ -22,7 +45,6 @@ class deque{
         }
 
         ///////////........... operation 2 initializing the deque fo size n with all the values as defaut valus T.
-        
         deque(int n){
             arr = new T[n];
             Qcapacity = n;
@@ -238,6 +260,46 @@ class deque{
         }
 };
 
-int main(){
+
+
+////////.............. Random queue implementation
+template <class T>
+class RandomizedQueue{
+    private:
+        deque<T> RandomQueue;
     
+    public:
+        void enqueue(int val){
+            RandomQueue.push_Back(val);
+        }
+
+        T dequeue(){
+            if(RandomQueue.empty()){
+                cout << "Queue is empty";
+                return T();
+            }
+            int index = rand()%RandomQueue.size();
+            T val = RandomQueue[index];
+
+            int lastInd = RandomQueue.size()-1;
+            if(index != lastInd){
+                RandomQueue[index] = RandomQueue[lastInd];
+            }
+            RandomQueue.pop_Back();
+            return val;
+        }
+
+        T sample(){
+            if(RandomQueue.empty()){
+                cout << "Queue is empty";
+                return T();
+            }
+            int index = rand()%RandomQueue.size();
+            return RandomQueue[index];
+        }
+};
+
+int main(){
+    while(true){
+    }
 }
