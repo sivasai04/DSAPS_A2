@@ -1,7 +1,7 @@
 #include <iostream>
-#include <cstdlib>
 
 using namespace std;
+
 
 template <class T>
 
@@ -69,7 +69,7 @@ class deque{
         }
 
         /////////.......... operation 4 push_BackInd(val) that is append data at the end.
-        void push_Back(T& val){
+        void push_back(T& val){
             if(Qsize == Qcapacity){
                 doublesize();
             }
@@ -86,26 +86,20 @@ class deque{
         }
 
         //////////...........operation 5 pop_BackInd() remove the last element in the deque.
-        void pop_Back(){
-            if((FrontInd == BackInd) && (FrontInd == -1)){
-                cout << "deque is empty. this is operation is invalid".
-                return;
-            }
+        void pop_back(){
             if(FrontInd == BackInd){
                 //// means there is only one element.
                 FrontInd = BackInd = -1;
                 Qsize = 0;
-                return;
             }
-            BackInd = (BackInd-1+Qcapacity)%Qcapacity; 
-            Qsize--;
+            else{
+                BackInd = (BackInd-1+Qcapacity)%Qcapacity; 
+                Qsize--;
+            }
         }
 
         /////.......... operation 6 push_FrontInd(val) that is append data at the begin.
-        void push_Front(T& val){
-            // if(FrontInd == (BackInd+1)%Qcapacity){
-            //     doublesize();
-            // }
+        void push_front(T& val){
             if(Qsize == Qcapacity){
                 doublesize();
             }
@@ -122,23 +116,24 @@ class deque{
         }
 
         /////////..........operation 7 pop_FrontInd() remove the first element in the deque.
-        void pop_Front(){
+        void pop_front(){
             if((FrontInd == BackInd) && (FrontInd == -1)){
-                cout << "deque is empty. this is operation is invalid".
-                return;
+                cout << "deque is empty. this is operation is invalid";
             }
-            if(FrontInd == BackInd){
+            else if(FrontInd == BackInd){
                 //// means there is only one element.
                 FrontInd = BackInd = -1;
                 Qsize = 0;
                 return;
             }
-            FrontInd = (FrontInd+1)%Qcapacity;
-            Qsize--;
+            else{
+                FrontInd = (FrontInd+1)%Qcapacity;
+                Qsize--;
+            }
         }
 
         /////////..........operation 8 returns the front element.
-        T Front(){
+        T front(){
             if(Qsize == 0){
                 return T();
             }
@@ -154,14 +149,15 @@ class deque{
         }
 
         /////////..........operation 10 pop_FrontInd() remove the first element in the deque.
-        T operator[](int ind){
+        T& operator[](int ind){
             if(ind < 0){
                 ind =  Qsize + ind;
             }
             if(ind < 0 || ind >= Qsize){
-                return T();
+                static T dummy_variable;
+                return dummy_variable;
             }
-            int returnInd = (front+ind)%Qcapacity;
+            int returnInd = (FrontInd+ind)%Qcapacity;
             return arr[returnInd];
         }
 
@@ -184,9 +180,9 @@ class deque{
         /////////..........operation 14 changing the size dynamically to new size n with values if n > Qcapacity. and shrinking it when n < Qcapacity
         void resize(int n, T& val){
             if(n > Qsize){
-                int rem = n-Qsizel
+                int rem = n-Qsize;
                 for(int i=0; i<rem; i++){
-                    push_Back(val);
+                    push_back(val);
                 }
             }
             else if(n < Qsize){
@@ -195,7 +191,7 @@ class deque{
                 }
                 T* ResizeArr = new T[n];
                 for(int i=0; i<n; i++){
-                    int ind = (front+i)%Qcapacity;
+                    int ind = (FrontInd+i)%Qcapacity;
                     ResizeArr[i] = arr[ind];
                 }
                 delete[] arr;
@@ -214,7 +210,7 @@ class deque{
             else{
                 T* ResizeArr = new T[n];
                 for(int i=0; i<Qsize; i++){
-                    int ind = (front+i)%Qcapacity;
+                    int ind = (FrontInd+i)%Qcapacity;
                     ResizeArr[i] = arr[ind];
                 }
                 delete[] arr;
@@ -232,7 +228,7 @@ class deque{
             }
             T* ResizeArr = new T[Qsize];
             for(int i=0; i<Qsize; i++){
-                int ind = (front+i)%Qcapacity;
+                int ind = (FrontInd+i)%Qcapacity;
                 ResizeArr[i] = arr[ind];
             }
             delete[] arr;
@@ -261,45 +257,90 @@ class deque{
 };
 
 
-
-////////.............. Random queue implementation
-template <class T>
-class RandomizedQueue{
-    private:
-        deque<T> RandomQueue;
-    
-    public:
-        void enqueue(int val){
-            RandomQueue.push_Back(val);
-        }
-
-        T dequeue(){
-            if(RandomQueue.empty()){
-                cout << "Queue is empty";
-                return T();
-            }
-            int index = rand()%RandomQueue.size();
-            T val = RandomQueue[index];
-
-            int lastInd = RandomQueue.size()-1;
-            if(index != lastInd){
-                RandomQueue[index] = RandomQueue[lastInd];
-            }
-            RandomQueue.pop_Back();
-            return val;
-        }
-
-        T sample(){
-            if(RandomQueue.empty()){
-                cout << "Queue is empty";
-                return T();
-            }
-            int index = rand()%RandomQueue.size();
-            return RandomQueue[index];
-        }
-};
-
 int main(){
-    while(true){
+    deque <int> dq;
+
+    while (true) {
+        int choice;
+        cin >> choice;
+
+        int n, x;
+        if (choice == 1) {
+            dq.clear();
+        } 
+        else if (choice == 2) {
+            cin >> n;
+            dq = deque<int>(n);
+        } 
+        else if (choice == 3) {
+            cin >> n >> x;
+            dq = deque<int>(n, x);
+        } 
+        else if (choice == 4) {
+            cin >> x;
+            dq.push_back(x);
+        } 
+        else if (choice == 5) {
+            dq.pop_back();
+        }
+        else if (choice == 6) {
+            cin >> x;
+            dq.push_front(x);
+        } 
+        else if (choice == 7) {
+            dq.pop_front();
+        } 
+        else if (choice == 8) {
+            cout << dq.front() << endl;
+            continue; 
+        } 
+        else if (choice == 9) {
+            cout << dq.back() << endl;
+            continue;
+        } 
+        else if (choice == 10) {
+            cin >> n;
+            cout << dq[n] << endl;
+            continue;
+        } 
+        else if (choice == 11) {
+            cout << dq.empty() << endl;
+            continue;
+        } 
+        else if (choice == 12) {
+            cout << "Deque size is: " << dq.size() << endl;
+            continue;
+        } 
+        else if (choice == 13) {
+            cout << "Enter new size n: ";
+            cin >> n;
+            dq.resize(n);
+        } 
+        else if (choice == 14) {
+            cout << "Enter new size n and value d: ";
+            cin >> n >> x;
+            dq.resize(n, x);
+        } 
+        else if (choice == 15) {
+            cout << "Enter new capacity n: ";
+            cin >> n;
+            dq.reserve(n);
+        } 
+        else if (choice == 16) {
+            dq.shrink_to_fit();
+        } 
+        else if (choice == 17) {
+            dq.clear();
+        } 
+        else if (choice == 18) {
+            cout << dq.capacity() << endl;
+            continue;
+        } 
+        else if (choice == 0) {
+            cout << "Exiting." << endl;
+            break; 
+        } 
     }
+    return 0;
 }
+

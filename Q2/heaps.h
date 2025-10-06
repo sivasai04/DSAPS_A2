@@ -1,3 +1,6 @@
+#ifndef HEAPS_H
+#define HEAPS_H
+
 #include <iostream>
 
 using namespace std;
@@ -173,6 +176,5 @@ class priority_queue{
         }
 };
 
-int main(){
 
-}
+#endif
